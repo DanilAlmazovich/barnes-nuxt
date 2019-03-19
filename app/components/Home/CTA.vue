@@ -6,7 +6,7 @@
       </div>
       <div>
         <h3 class="text-3xl font-semibold text-neutral-900 max-sm:text-xl">Are you shopping for your department?</h3>
-        <p class="mt-2 text-neutral-600">Have questions or need help? Contact us:</p>
+        <p class="mt-2 text-neutral-600">Do you have any questions? Contact us.</p>
 <!--        <div class="mt-6 flex gap-3">-->
 <!--          <a href="#" class="bg-white w-[36px] h-[36px] flex items-center justify-center rounded-xl">-->
 <!--            <img src="@/assets/images/facebook.png" alt="">-->

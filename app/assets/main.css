@@ -2,7 +2,6 @@
 @import 'tailwindcss-primeui';
 @import 'primeicons/primeicons.css';
 @import "../assets/fonts/Inter/fonts.css";
-@import 'swiper/css';
 
 
 @custom-variant dark (&:where(.dark-app, .dark-app *));

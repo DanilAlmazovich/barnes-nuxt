@@ -3,8 +3,10 @@ import {useRoute} from "vue-router";
 import {onMounted, ref} from "vue";
 import {axiosInstance} from "@/configs/axios.ts";
 import SetImage from "@/components/SetImage.vue";
-import {Swiper, SwiperSlide} from 'swiper/vue';
-import 'swiper/css';
+
+import {Swiper, SwiperSlide} from "swiper/vue"
+import {Pagination, Navigation} from "swiper/modules"
+const modules = [Pagination, Navigation]
 
 const route = useRoute()
 
@@ -73,10 +75,12 @@ const selectImage = (id: number) => {
         <div class="pt-4">
           <template v-if="product?.images.length">
             <Swiper :space-between="20"
-                    :slides-per-view="3">
+                    pagination
+                    :modules="modules"
+                    :slidesPerView="'auto'">
               <template v-for="(image, index) in product.images" :key="index">
-                <SwiperSlide>
-                  <div class="w-36 h-36 rounded cursor-pointer hover:shadow border max-xxl:w-auto max-xxl:h-40"
+                <SwiperSlide class="!w-36">
+                  <div class="!h-36 rounded cursor-pointer hover:shadow border"
                        :class="index === selectedImage ? 'border-gray-400' : 'border-transparent'"
                        @click="selectImage(index)">
                     <SetImage class="w-full h-full object-contain" :image-url="image"/>

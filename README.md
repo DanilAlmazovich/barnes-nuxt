@@ -83,4 +83,7 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 
 ## Update
     docker pull danilalmazov/repo:barnes-front
+    
+    docker-compose up -d
+
     docker stack deploy --detach=false --with-registry-auth -c docker-compose.yml barnes-front
