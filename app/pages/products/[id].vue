@@ -54,7 +54,7 @@ const selectImage = (id: number) => {
       <span class="text-gray-800 font-medium max-md:text-xs">{{ product?.title }}</span>
     </nav>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="grid grid-cols-2  max-xl:grid-cols-1  gap-8">
       <!-- Left Side (Images) -->
       <div>
         <div class="mb-10">
@@ -76,7 +76,7 @@ const selectImage = (id: number) => {
                     :slides-per-view="3">
               <template v-for="(image, index) in product.images" :key="index">
                 <SwiperSlide>
-                  <div class="w-36 h-36 rounded cursor-pointer hover:shadow border"
+                  <div class="w-36 h-36 rounded cursor-pointer hover:shadow border max-xxl:w-auto max-xxl:h-40"
                        :class="index === selectedImage ? 'border-gray-400' : 'border-transparent'"
                        @click="selectImage(index)">
                     <SetImage class="w-full h-full object-contain" :image-url="image"/>

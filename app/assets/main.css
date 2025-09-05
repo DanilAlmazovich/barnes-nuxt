@@ -36,3 +36,7 @@ button, a {
 .swiper-slide {
     margin-right: 10px;
 }
+
+.p-toast {
+    z-index: 9999 !important;
+}
