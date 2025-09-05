@@ -1,0 +1,38 @@
+@import "tailwindcss";
+@import 'tailwindcss-primeui';
+@import 'primeicons/primeicons.css';
+@import "../assets/fonts/Inter/fonts.css";
+@import 'swiper/css';
+
+
+@custom-variant dark (&:where(.dark-app, .dark-app *));
+
+body {
+    font-family: Inter, sans-serif;
+    margin: 0;
+}
+
+.container {
+    @apply m-auto px-4;
+    max-width: 1200px;
+}
+
+@theme {
+    --color-gray-200: #F2F2F4;
+    --color-gray-600: #303030;
+    --color-gray-700: #1E1E1E;
+
+    --breakpoint-xs: 400px;
+    --breakpoint-sm: 500px;
+    --breakpoint-md: 600px;
+    --breakpoint-lg: 700px;
+    --breakpoint-xl: 865px;
+    --breakpoint-xxl: 1024px;
+}
+button, a {
+    cursor: pointer;
+}
+
+.swiper-slide {
+    margin-right: 10px;
+}

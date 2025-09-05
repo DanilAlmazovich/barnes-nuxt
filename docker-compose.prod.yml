@@ -1,0 +1,11 @@
+services:
+  app:
+    image: danilalmazov/repo:barnes-front
+    deploy:
+      replicas: 2
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:80/health/check" ]
+      retries: 3
+      timeout: 5s
+    ports:
+      - '3000:3000'
