@@ -32,9 +32,9 @@ button, a {
     cursor: pointer;
 }
 
-.swiper-slide {
-    margin-right: 10px;
-}
+/*.swiper-slide {*/
+/*    margin-right: 10px;*/
+/*}*/
 
 .p-toast {
     z-index: 9999 !important;

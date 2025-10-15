@@ -54,6 +54,7 @@ onMounted(() => {
         <Swiper :slidesPerView="'auto'"
                 pagination
                 :modules="modules"
+                class="swiper-brands"
                 :space-between="20">
           <template v-if="products?.length && !getProductsLoading">
             <SwiperSlide v-for="product in products" :key="product.id" class="h-full py-2 !w-[260px]">
@@ -81,10 +82,10 @@ onMounted(() => {
   </section>
 </template>
 <style lang="css">
-.swiper-wrapper {
-    padding-bottom: 30px;
+.swiper-brands .swiper-wrapper {
+    padding-bottom: 40px;
 }
-.swiper-pagination {
+.swiper-brands .swiper-pagination {
   bottom: 0 !important;
 }
 </style>
