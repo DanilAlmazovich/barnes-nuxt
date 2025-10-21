@@ -11,13 +11,21 @@ const visible = ref(false)
 watch(() => route.path, () => {
   visible.value = false
 })
+watch(() => route.query, () => {
+  visible.value = false
+})
 
 const searchValue = ref<string>(route.query.search as string || '')
 
 const search = () => {
   if(searchValue.value.length) {
-    router.push(`/products?search=${searchValue.value.length ? searchValue.value : undefined}`)
+    router.push({path: '/products', query: {...route.query, search: searchValue.value.length ? searchValue.value : undefined}})
   }
+}
+
+const clearSearch = () => {
+  searchValue.value = ''
+  router.push({path: `/products`, query: {...route.query,  search: undefined}})
 }
 </script>
 
@@ -33,14 +41,14 @@ const search = () => {
         <nav class="flex items-center gap-12 text-sm text-neutral-400 max-xxl:gap-6 max-xl:hidden">
           <nuxt-link to="/products" class="text-lg hover:text-white duration-200 uppercase">Products</nuxt-link>
           <nuxt-link to="/about" class="text-lg hover:text-white duration-200 uppercase">About us</nuxt-link>
-          <nuxt-link to="/contacts" class="text-lg hover:text-white duration-200 uppercase">Contact</nuxt-link>
+          <nuxt-link to="/contacts" class="text-lg hover:text-white duration-200 uppercase">Contacts</nuxt-link>
         </nav>
         <div class="flex items-center gap-4 max-xl:hidden">
           <div class="relative hidden sm:block">
             <form @submit.prevent="search">
               <input
                   v-model="searchValue"
-                  class="w-60 rounded-[8px] bg-gray-600 px-4 py-2 text-sm text-neutral-200 placeholder-neutral-400 outline-none max-xxl:w-50"
+                  class="w-64 rounded-[8px] bg-gray-600 px-4 py-2 text-sm text-neutral-200 placeholder-neutral-400 outline-none max-xxl:w-50"
                   placeholder="Search for anything…"/>
               <svg @click.prevent="search"
                    class="absolute right-3 top-2.5 h-4 w-4 text-neutral-400 cursor-pointer"
@@ -50,6 +58,9 @@ const search = () => {
                 <circle cx="11" cy="11" r="8"/>
                 <line x1="21" y1="21" x2="16.65" y2="16.65"/>
               </svg>
+              <i v-if="searchValue.length > 0"
+                 @click.prevent="clearSearch"
+                 class="pi pi-times absolute right-[33px] top-2.5 w-[0.90rem] h-[0.90rem] text-neutral-400 cursor-pointer"></i>
             </form>
           </div>
           <button class="md:hidden rounded-full p-2 text-neutral-200 hover:bg-neutral-800" aria-label="Search">
@@ -83,6 +94,9 @@ const search = () => {
               <circle cx="11" cy="11" r="8"/>
               <line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
+            <i v-if="searchValue.length > 0"
+               @click.prevent="clearSearch"
+               class="pi pi-times absolute right-[33px] top-2.5 w-[0.90rem] h-[0.90rem] text-neutral-400 cursor-pointer"></i>
           </form>
         </div>
       </div>

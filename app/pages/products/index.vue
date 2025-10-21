@@ -87,7 +87,7 @@ const visible = ref(false)
                   <div
                       class="bg-white rounded-lg shadow-sm p-4 flex flex-col items-center text-center justify-between w-full">
                     <div class="flex flex-col mb-2">
-                      <SetImage :image-url="product.images[0]" class="h-36 object-contain mb-4"/>
+                      <SetImage :image-url="product.images[0]" class="h-36 max-md:h-80 object-contain mb-4 max-[450px]:h-48"/>
                       <p class="font-medium text-sm mb-2">{{ product.title }}</p>
                     </div>
                   </div>
@@ -101,7 +101,7 @@ const visible = ref(false)
             </template>
           </div>
           <template v-if="!products?.length && !getProductsLoading">
-            <Message class="w-full">Empty data</Message>
+            <Message class="w-full">No products were found for your search</Message>
           </template>
           <div class="flex justify-center mt-6 py-2" v-if="meta && products?.length">
             <Paginator :first="(meta?.current_page - 1) * meta?.per_page"

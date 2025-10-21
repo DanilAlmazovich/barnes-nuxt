@@ -77,6 +77,7 @@ const selectImage = (id: number) => {
             <Swiper :space-between="20"
                     pagination
                     :modules="modules"
+                    class="swiper-brands"
                     :slidesPerView="'auto'">
               <template v-for="(image, index) in product.images" :key="index">
                 <SwiperSlide class="!w-36">

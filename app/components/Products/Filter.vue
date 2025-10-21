@@ -16,7 +16,7 @@ const categories = ref<CategoryModel[]>([])
 
 const getCategories = async (search?: string) => {
   try {
-    const response = await axiosInstance.get(`/categories/categories`, {params: {per_page: 30, search: search}})
+    const response = await axiosInstance.get(`/categories/categories`, {params: {per_page: 60, search: search}})
     categories.value = response.data.data
   } catch (e) {
     console.log(e)
@@ -44,22 +44,35 @@ const searchCategory = ({value}: {value: string}) => {
 
 <template>
   <aside class="col-span-3 bg-white rounded-lg shadow-sm px-4 pt-6 pb-10 max-xxl:shadow-none max-xxl:px-0">
-    <h3 class="font-bold mb-3">Catalog</h3>
-    <Select option-value="id"
-            v-model="selectedCategory"
-            :options="categories"
-            size="small"
-            showClear
-            @change="selectCategory"
-            filter
-            class="w-full rounded-lg"
-            @filter="searchCategory"
-            option-label="name">
-      <template #option="{option}">
-        <div class="max-w-40">
-          {{ option.name }}
-        </div>
-      </template>
-    </Select>
+    <div class="flex">
+      <h3 class="font-bold mb-3 text-lg">Filter</h3>
+    </div>
+    <div class="flex flex-col gap-1">
+      <label for="catalog" class="cursor-pointer">Catalog</label>
+      <Select option-value="id"
+              v-model="selectedCategory"
+              :options="categories"
+              input-id="catalog"
+              size="small"
+              showClear
+              @change="selectCategory"
+              filter
+              class="w-full rounded-lg"
+              @filter="searchCategory"
+              option-label="name">
+        <template #option="{option}">
+          <div class="max-w-40">
+            {{ option.name }}
+          </div>
+        </template>
+      </Select>
+    </div>
   </aside>
 </template>
+
+<style lang="css">
+
+.p-select-list-container {
+  min-height: 400px;
+}
+</style>

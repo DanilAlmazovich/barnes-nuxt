@@ -49,6 +49,7 @@ const prevSlide = () => {
 <template>
   <section class="h-[950px] max-lg:h-[600px]">
     <Swiper v-if="banners?.length"
+            loop
             :effect="'fade'"
             :pagination="{
       clickable: true
