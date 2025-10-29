@@ -1,5 +1,44 @@
 <script setup lang="ts">
 
+import {axiosInstance} from "~/configs/axios";
+import {useToast} from "primevue/usetoast";
+
+const toast = useToast()
+
+interface FormDataModel {
+  name: string
+  email: string
+  message: string
+}
+
+const formData = ref<FormDataModel>({
+  name: '',
+  email: '',
+  message: '',
+})
+
+const clearFormData = () => {
+  formData.value = {
+    name: '',
+    email: '',
+    message: '',
+  }
+}
+
+const feedbackLoading = ref<boolean>(false)
+const feedback = async () => {
+  feedbackLoading.value = true
+  try {
+    await axiosInstance.post('/api/v1/feedback', formData.value)
+    clearFormData()
+    toast.add({ severity: 'success', summary: 'Subscribed!', life: 3000 })
+  } catch (e) {
+    console.log(e)
+  } finally {
+    feedbackLoading.value = false
+  }
+}
+
 </script>
 
 <template>
@@ -16,12 +55,10 @@
   </div>
   <div class="bg-gray-50 flex-1 pt-14 pb-30">
     <div class="container">
-      <div class="grid grid-cols-2 max-md:grid-cols-1">
+      <div class="grid grid-cols-2 max-[880px]:grid-cols-1 max-[880px]:gap-10">
         <div class="flex flex-col gap-10">
           <span class="uppercase text-gray-400 font-medium text-lg">Contact us</span>
           <h1 class="text-4xl font-bold max-md:text-2xl max-lg:text-3xl">Get in touch today</h1>
-<!--          <p class="text-gray-500 text-lg max-md:text-base">Lorem ipsum dolor sit amet consectetur adipiscing elit nulla adipiscing-->
-<!--            tincidunt interdum tellus du.</p>-->
           <div class="flex flex-col gap-6">
             <a href="mailto:sales@barnesfire.com">
               <div class="flex items-center gap-2">
@@ -72,6 +109,20 @@
             </div>
           </div>
         </div>
+        <form @submit.prevent="feedback">
+          <div class="rounded-xl bg-white px-8 py-12 max-[550px]:px-4 max-[550px]:py-6">
+            <h3 class="font-semibold text-2xl mb-6">Contact Us</h3>
+            <div class="grid grid-cols-2 gap-6 mb-6">
+              <InputText v-model="formData.name" required class="rounded-xl bg-gray-50" placeholder="Name"/>
+              <InputText v-model="formData.email" required type="email" class="rounded-xl bg-gray-50"
+                         placeholder="Email"/>
+            </div>
+            <Textarea v-model="formData.message" required placeholder="Message"
+                      class="w-full rounded-xl min-h-40 bg-gray-50 mb-10"/>
+            <Button :loading="feedbackLoading" :disabled="feedbackLoading" type="submit" label="Send message"
+                    severity="danger" size="large" class="text-base"/>
+          </div>
+        </form>
       </div>
     </div>
   </div>

@@ -9,7 +9,7 @@ const toast = useToast()
 
 const subscribe = async () => {
   try {
-    await axiosInstance.post(`/feedback/add`, {email: email.value})
+    await axiosInstance.post(`/api/v1/subscribe`, {email: email.value})
     email.value = ''
     toast.add({ severity: 'success', summary: 'Subscribed!', life: 3000 })
   } catch (e) {
