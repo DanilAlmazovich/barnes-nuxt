@@ -47,7 +47,7 @@ const prevSlide = () => {
 </script>
 
 <template>
-  <section class="h-[950px] max-lg:h-[600px]">
+  <section class="h-[calc(100vh-109px)] max-xl:h-[calc(100vh-81px)]">
     <Swiper v-if="banners?.length"
             loop
             :effect="'fade'"
@@ -60,7 +60,7 @@ const prevSlide = () => {
       disableOnInteraction: false,
     }"
             @swiper="(s) => (swiperInstance = s)"
-            class="swiper-banner h-[950px] max-lg:h-[600px]">
+            class="swiper-banner h-full">
       <div class="container absolute m-auto left-0 right-0 z-[20] bottom-[80px] flex justify-end max-lg:hidden">
         <div class="flex gap-4">
           <button class="text-white cursor-pointer" @click="prevSlide">
