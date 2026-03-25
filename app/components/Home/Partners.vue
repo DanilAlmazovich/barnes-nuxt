@@ -5,7 +5,7 @@
 <template>
   <section class="py-20">
     <div class="mx-auto container px-4 sm:px-6 lg:px-8 text-center">
-      <h3 class="text-3xl font-semibold text-neutral-800 max-sm:text-xl">Trusted by 10,000+ companies around the world</h3>
+      <h3 v-scroll-reveal class="text-3xl font-semibold text-neutral-800 max-sm:text-xl">Trusted by 10,000+ companies around the world</h3>
       <div class="mt-6 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-6 items-center">
         <img src="@/assets/images/partners-1.png"
              alt="partner"

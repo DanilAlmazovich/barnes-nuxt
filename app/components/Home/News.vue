@@ -17,7 +17,7 @@ const visibleNews = computed(() => news.slice(newsIndex.value, newsIndex.value +
   <section class="py-20">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div class="mb-6 flex items-end justify-between">
-        <h2 class="text-2xl font-semibold text-neutral-900 max-sm:text-xl">Latest News</h2>
+        <h2 class="text-2xl font-semibold text-neutral-900 max-sm:text-xl" v-scroll-reveal>Latest News</h2>
         <div class="hidden sm:flex gap-2">
           <button class="rounded-full border p-2 hover:bg-neutral-100" aria-label="prev"/>
           <button class="rounded-full border p-2 hover:bg-neutral-100" aria-label="next"/>

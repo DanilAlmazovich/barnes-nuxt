@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {onMounted, ref, watch} from "vue";
 import {Button, Paginator, Skeleton, Drawer} from "primevue";
-import axios from "axios";
 import SetImage from "@/components/SetImage.vue"
 import {useRoute, useRouter} from "vue-router";
 import {axiosInstance} from "~/configs/axios";
@@ -61,82 +60,141 @@ const visible = ref(false)
 </script>
 
 <template>
-  <div class="bg-gray-50 py-6 flex-1 h-full">
-    <div class="container px-4">
-      <div class="flex items-center space-x-2 text-sm text-gray-500 mb-4">
-        <nuxt-link to="/">
-          <span class="max-md:text-xs">Home</span>
-        </nuxt-link>
-        <i class="pi pi-angle-right"></i>
-        <span class="max-md:text-xs">Products</span>
+  <div class="bg-neutral-50 py-10 flex-1 min-h-screen">
+    <div class="container mx-auto px-4">
+      <!-- Breadcrumbs -->
+      <nav class="flex items-center space-x-3 text-sm text-neutral-500 mb-8 overflow-x-auto whitespace-nowrap pb-2">
+        <nuxt-link to="/" class="hover:text-primary transition-colors">Home</nuxt-link>
+        <i class="pi pi-angle-right text-[10px]"></i>
+        <span class="text-neutral-900 font-medium">Products</span>
+      </nav>
+
+      <div class="flex items-center justify-between mb-8">
+        <h1 class="text-3xl font-bold text-neutral-900">Our Products</h1>
+        <div class="hidden max-xxl:block">
+          <Button 
+            icon="pi pi-filter" 
+            label="Filters" 
+            outlined 
+            severity="secondary"
+            @click.prevent="visible = !visible"
+            class="rounded-xl"
+          />
+        </div>
       </div>
-      <div class="hidden max-xxl:flex pb-6 justify-end">
-        <Button icon="pi pi-filter"
-                text
-                @click.prevent="visible = !visible"/>
-      </div>
-      <div class="grid grid-cols-12 gap-6 max-xl:gap-2 items-start ">
-        <ProductsFilter class="max-xxl:hidden"/>
+
+      <div class="grid grid-cols-12 gap-8 items-start">
+        <!-- Sidebar Filters -->
+        <aside class="col-span-3 max-xxl:hidden sticky top-24">
+          <ProductsFilter />
+        </aside>
+
+        <!-- Product Grid -->
         <main class="col-span-9 max-xxl:col-span-12">
-          <div
-              class="grid grid-cols-3 gap-6 max-xl:grid-cols-3 max-xl:gap-2 max-lg:grid-cols-2 max-md:grid-cols-1 max-md:gap-4">
-            <template v-if="products?.length && !getProductsLoading">
-              <template v-for="(product, i) in products" :key="i">
-                <NuxtLink class="flex w-full"
-                          :to="`/products/${product.id}`">
-                  <div
-                      class="bg-white rounded-lg shadow-sm p-4 flex flex-col items-center text-center justify-between w-full">
-                    <div class="flex flex-col mb-2">
-                      <SetImage :image-url="product.images[0]" class="h-36 max-md:h-80 object-contain mb-4 max-[450px]:h-48"/>
-                      <p class="font-medium text-sm mb-2">{{ product.title }}</p>
-                    </div>
+          <div 
+            v-if="products?.length && !getProductsLoading"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+          >
+            <NuxtLink 
+              v-for="product in products" 
+              :key="product.id"
+              :to="`/products/${product.id}`"
+              class="group flex w-full"
+            >
+              <div
+                class="bg-white rounded-2xl shadow-sm hover:shadow-2xl p-6 flex flex-col items-center text-center justify-between w-full min-h-[380px] transition-all duration-500 transform hover:-translate-y-2 border border-neutral-100"
+              >
+                <div class="flex flex-col items-center w-full">
+                  <div class="overflow-hidden w-full mb-6 rounded-xl">
+                    <SetImage 
+                      :image-url="product.images[0]" 
+                      class="h-48 w-full object-contain transition-transform duration-700 group-hover:scale-110"
+                    />
                   </div>
-                </NuxtLink>
-              </template>
-            </template>
-            <template v-if="getProductsLoading">
-              <Skeleton height="300px"
-                        width="100%"
-                        v-for="n in 30"/>
-            </template>
+                  <h3 class="font-bold text-neutral-800 text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors duration-300">
+                    {{ product.title }}
+                  </h3>
+                  <p class="text-neutral-500 text-sm mb-4 line-clamp-2">
+                    {{ product.category }}
+                  </p>
+                </div>
+              </div>
+            </NuxtLink>
           </div>
-          <template v-if="!products?.length && !getProductsLoading">
-            <Message class="w-full">No products were found for your search</Message>
-          </template>
-          <div class="flex justify-center mt-6 py-2" v-if="meta && products?.length">
-            <Paginator :first="(meta?.current_page - 1) * meta?.per_page"
-                       :rows="meta?.per_page"
-                       :totalRecords="meta?.total"
-                       @page="selectPage"/>
+
+          <!-- Loading State -->
+          <div v-if="getProductsLoading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div v-for="n in 9" :key="n" class="bg-white rounded-2xl p-6 border border-neutral-100 space-y-4">
+              <Skeleton height="200px" width="100%" borderRadius="1rem" />
+              <Skeleton width="60%" height="1.5rem" />
+              <Skeleton width="40%" />
+              <div class="flex justify-between items-center pt-4">
+                <Skeleton width="30%" height="2rem" />
+                <Skeleton shape="circle" size="3rem" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty State -->
+          <div v-if="!products?.length && !getProductsLoading" class="bg-white rounded-2xl p-12 text-center border border-dashed border-neutral-300">
+            <div class="w-20 h-20 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4 text-neutral-400">
+              <i class="pi pi-search text-3xl"></i>
+            </div>
+            <h3 class="text-xl font-bold text-neutral-900 mb-2">No products found</h3>
+            <p class="text-neutral-500 mb-6">Try adjusting your filters or search criteria.</p>
+            <Button label="Clear all filters" @click="router.push('/products')" outlined />
+          </div>
+
+          <!-- Pagination -->
+          <div class="flex justify-center mt-12 mb-10" v-if="meta && products?.length && meta.total_pages > 1">
+            <Paginator 
+              :first="(meta?.current_page - 1) * meta?.per_page"
+              :rows="meta?.per_page"
+              :totalRecords="meta?.total"
+              @page="selectPage"
+              template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink"
+            />
           </div>
         </main>
       </div>
     </div>
   </div>
-  <Drawer position="right" v-model:visible="visible" header="filter" class="w-[25rem] max-sm:w-full">
-    <div class="py-6">
-      <ProductsFilter/>
+
+  <!-- Mobile Filters Drawer -->
+  <Drawer position="right" v-model:visible="visible" header="Filters" class="!w-[350px] max-sm:!w-full">
+    <div class="px-2">
+      <ProductsFilter />
     </div>
   </Drawer>
 </template>
+
 <style lang="css">
-.p-paginator .p-paginator-pages .p-paginator-page {
-  border-radius: 5px;
-  background: white;
-  color: #000;
+.p-paginator {
+  background: transparent !important;
+  border: none !important;
 }
 
-@media (min-width: 500px) {
-  .p-paginator .p-paginator-pages .p-paginator-page {
-    width: 30px;
-    height: 30px;
-  }
+.p-paginator .p-paginator-pages .p-paginator-page {
+  border-radius: 12px;
+  background: white;
+  color: #1E1E1E;
+  margin: 0 4px;
+  border: 1px solid #E5E5E5;
+  transition: all 0.3s ease;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page:hover {
+  border-color: #263D87;
+  color: #263D87;
 }
 
 .p-paginator .p-paginator-pages .p-paginator-page.p-paginator-page-selected {
-  background: #000;
+  background: #263D87;
   color: #fff;
+  border-color: #263D87;
+  box-shadow: 0 4px 12px rgba(38, 61, 135, 0.2);
 }
+
 .p-drawer-right {
   z-index: 2002 !important;
 }
