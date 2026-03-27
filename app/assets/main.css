@@ -16,6 +16,12 @@ body {
     max-width: 1200px;
 }
 
+@media (max-width: 400px) {
+    .container {
+        @apply px-3;
+    }
+}
+
 @theme {
     --color-gray-200: #F2F2F4;
     --color-gray-600: #303030;
@@ -27,6 +33,12 @@ body {
     --breakpoint-lg: 700px;
     --breakpoint-xl: 865px;
     --breakpoint-xxl: 1024px;
+}
+/* Prevent horizontal scroll on very small devices */
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
 }
 button, a {
     cursor: pointer;

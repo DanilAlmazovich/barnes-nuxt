@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import {onMounted, ref, useAttrs} from "vue";
-import axios from "axios";
-import {axiosInstance} from "@/configs/axios.ts";
+import {computed, useAttrs, onBeforeUnmount, ref, watch} from "vue";
 import {Env} from "@/configs/env.ts";
 
 interface PropsImage {
@@ -11,41 +9,61 @@ interface PropsImage {
 }
 
 const attrs = useAttrs()
-const {
-  title = undefined,
-  imageUrl = undefined,
-  blobObject = null
-} = defineProps<PropsImage>()
+const props = defineProps<PropsImage>()
 
-const getImage = async () => {
-  setSrc(`${Env.BASE_API_URL}/${imageUrl}`)
-}
+const objectUrl = ref<string | null>(null)
 
-const convertImage = (file: Blob) => {
-  imageSrc.value = URL.createObjectURL(file)
-}
-
-const setSrc = (fileSrc: string) => {
-  imageSrc.value = fileSrc
-}
-
-onMounted(() => {
-  if (imageUrl) {
-    getImage()
+// Очистка памяти при смене объекта или размонтировании
+const cleanup = () => {
+  if (objectUrl.value) {
+    URL.revokeObjectURL(objectUrl.value)
+    objectUrl.value = null
   }
-  if (blobObject) {
-    convertImage(blobObject)
+}
+
+watch(() => props.blobObject, (newBlob) => {
+  cleanup()
+  if (newBlob && process.client) {
+    objectUrl.value = URL.createObjectURL(newBlob)
   }
+}, { immediate: true })
+
+onBeforeUnmount(cleanup)
+
+const finalSrc = computed(() => {
+  if (objectUrl.value) {
+    return objectUrl.value
+  }
+  if (props.imageUrl) {
+    if (props.imageUrl.startsWith('http') || props.imageUrl.startsWith('blob:')) {
+      return props.imageUrl
+    }
+    return `${Env.BASE_API_URL}/${props.imageUrl}`
+  }
+  return null
 })
-const imageSrc = ref<string | null>(null)
 
+// Если это Blob, используем обычный img, так как NuxtImg не может его оптимизировать
+const isBlob = computed(() => !!objectUrl.value || props.imageUrl?.startsWith('blob:'))
 </script>
 
 <template>
-  <img
-      v-if="imageSrc"
-      v-bind="attrs"
-      :src="imageSrc"
-      :alt="title"
-  >
+  <template v-if="finalSrc">
+    <img
+        v-if="isBlob"
+        v-bind="attrs"
+        :src="finalSrc"
+        :alt="title || 'Product Image'"
+    >
+    <NuxtImg
+        v-else
+        v-bind="attrs"
+        :src="finalSrc"
+        :alt="title || 'Product Image'"
+        loading="lazy"
+        format="webp"
+        quality="80"
+        placeholder
+    />
+  </template>
 </template>

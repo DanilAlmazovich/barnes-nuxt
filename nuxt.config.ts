@@ -90,7 +90,11 @@ export default defineNuxtConfig({
     }
   },
 
-  modules: ['@primevue/nuxt-module', 'nuxt-swiper'],
+  modules: ['@primevue/nuxt-module', 'nuxt-swiper', '@nuxt/image'],
+
+  image: {
+    domains: ['barnesfire.com'], 
+  },
 
   primevue: {
     options: {

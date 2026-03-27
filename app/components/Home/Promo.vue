@@ -47,7 +47,7 @@ const prevSlide = () => {
 </script>
 
 <template>
-  <section class="h-[550px] max-xl:h-[calc(100vh-81px)] bg-neutral-900">
+  <section class="h-[550px] max-md:h-[500px] max-sm:h-[450px] max-xs:h-[400px] bg-neutral-900">
     <ClientOnly>
       <Swiper v-if="banners?.length"
               loop
@@ -62,7 +62,7 @@ const prevSlide = () => {
                 disableOnInteraction: false,
               }"
               @swiper="(s) => (swiperInstance = s)"
-              class="swiper-banner h-[550px]">
+              class="swiper-banner h-full">
         <div class="container absolute m-auto left-0 right-0 z-[20] bottom-[80px] flex justify-end max-lg:hidden">
           <div class="flex gap-4">
             <button class="text-white cursor-pointer hover:text-primary transition-colors" @click="prevSlide">
@@ -80,17 +80,17 @@ const prevSlide = () => {
             <div class="bg-black/40 absolute left-0 top-0 w-full h-full z-10 transition-opacity duration-1000"></div>
             
             <!-- Content Animation -->
-            <div class="container absolute left-0 top-0 bottom-0 right-0 m-auto flex flex-col justify-center z-20">
+            <div class="container absolute inset-0 m-auto flex flex-col justify-center z-20">
               <div :class="[
                   'transition-all duration-1000 delay-300 transform',
                   isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
               ]">
-                <h1 class="text-3xl sm:text-5xl md:text-6xl font-bold text-white whitespace-pre-line leading-tight max-sm:text-2xl mb-8 w-full md:w-3/4 drop-shadow-lg">
+                <h1 class="text-3xl sm:text-5xl md:text-6xl font-bold text-white whitespace-pre-line leading-tight max-sm:text-2xl max-xs:text-xl mb-6 md:mb-8 w-full md:w-3/4 drop-shadow-lg">
                   {{ banner.title }}
                 </h1>
                 <div class="flex gap-4" v-if="banner?.link_url">
                   <nuxt-link :to="banner?.link_url" class="group">
-                    <button class="rounded-xl px-12 py-4 bg-white text-black font-semibold hover:bg-primary hover:text-white transition-all duration-300 transform group-hover:scale-105 shadow-lg">
+                    <button class="rounded-xl px-8 sm:px-12 py-3 sm:py-4 bg-white text-black font-bold hover:bg-primary hover:text-white transition-all duration-300 transform group-hover:scale-105 shadow-lg text-sm xs:text-base">
                       Shop Now
                     </button>
                   </nuxt-link>
@@ -119,23 +119,29 @@ const prevSlide = () => {
 
 <style lang="css">
 .swiper-banner .swiper-pagination-bullet {
-  width: 12px;
-  height: 12px;
+  width: 8px;
+  height: 8px;
   background: rgba(255, 255, 255, 0.3);
   opacity: 1;
   transition: all 0.3s ease;
 }
 
+@media (min-width: 640px) {
+  .swiper-banner .swiper-pagination-bullet {
+    width: 12px;
+    height: 12px;
+  }
+}
+
 .swiper-banner .swiper-pagination-bullet-active {
   background: #FFFFFF !important;
-  width: 30px !important;
+  width: 24px !important;
   border-radius: 6px !important;
 }
 
-@media (max-width: 800px) {
-  .swiper-banner .swiper-pagination {
-    margin: 0 20px 20px !important;
-    justify-content: center !important;
+@media (min-width: 640px) {
+  .swiper-banner .swiper-pagination-bullet-active {
+    width: 30px !important;
   }
 }
 
@@ -144,9 +150,18 @@ const prevSlide = () => {
   max-width: 1200px !important;
   left: 0 !important;
   right: 0 !important;
-  margin: 0 auto 80px;
+  margin: 0 auto 40px;
   display: flex;
   z-index: 30;
-  justify-content: flex-start;
+  justify-content: center !important;
+  padding: 0 20px;
+}
+
+@media (min-width: 1024px) {
+  .swiper-banner .swiper-pagination {
+    margin: 0 auto 80px;
+    justify-content: flex-start !important;
+    padding: 0;
+  }
 }
 </style>

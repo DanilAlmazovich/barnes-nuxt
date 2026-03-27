@@ -20,66 +20,62 @@ const subscribe = async () => {
 </script>
 
 <template>
-  <footer class="bg-gray-700 text-neutral-300">
-    <div class="mx-auto container px-4 sm:px-6 lg:px-8 py-6">
-      <div
-          class="grid grid-cols-[1fr_1fr] gap-10 max-xl:grid-cols-[2fr_1fr] max-lg:grid-cols-[2fr_1fr] max-md:grid-cols-1">
-        <div class="space-y-4">
-          <div class="flex gap-2 pb-4 items-end">
-            <div class="flex items-center gap-3">
-              <NuxtLink class="flex w-40" to="/">
-                <img src="@/assets/images/logo-white.png" alt="">
-              </NuxtLink>
-            </div>
-            <!--            <p class="text-sm text-neutral-400">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam diam-->
-            <!--              varius tellus imperdiet.</p>-->
+  <footer class="bg-neutral-900 text-neutral-300 border-t border-white/5">
+    <div class="mx-auto container px-6 py-12 md:py-20">
+      <div class="flex flex-col lg:flex-row justify-between gap-16">
+        <!-- Brand and Newsletter -->
+        <div class="max-w-md space-y-10">
+          <NuxtLink class="inline-block w-44 md:w-52" to="/">
+            <img src="@/assets/images/logo-white.png" alt="The Barnes White Logo" class="w-full h-auto opacity-90 hover:opacity-100 transition-opacity">
+          </NuxtLink>
+          
+          <div class="space-y-5">
+            <h4 class="text-white font-bold text-xl tracking-tight">Stay Updated</h4>
+            <p class="text-neutral-400 text-base leading-relaxed">Subscribe to get the latest news and equipment updates directly to your inbox.</p>
+            <form @submit.prevent="subscribe" class="flex flex-col sm:flex-row gap-3">
+              <input 
+                v-model="email" 
+                required 
+                type="email" 
+                class="flex-1 rounded-xl bg-white/5 border border-white/10 px-5 py-3.5 text-sm outline-none placeholder-neutral-500 focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all"
+                placeholder="Email address"
+              />
+              <button 
+                type="submit" 
+                class="rounded-xl bg-white px-8 py-3.5 text-neutral-900 font-bold hover:bg-primary hover:text-white transition-all duration-300 shadow-lg"
+              >
+                Join
+              </button>
+            </form>
           </div>
-          <form @submit.prevent="subscribe">
-            <div class="flex gap-2">
-              <input v-model="email" required type="email" class="w-full rounded-xl bg-neutral-800 px-3 py-2 text-sm outline-none placeholder-neutral-500"
-                     placeholder="Enter your email"/>
-              <input type="submit" class="rounded-xl bg-white px-4 py-2 text-neutral-900"
-                     value="Subscribe">
-            </div>
-          </form>
-      </div>
-      <div class="flex justify-end max-md:justify-start">
-        <div>
-          <h4 class="mb-3 font-semibold text-white">Services</h4>
-          <ul class="space-y-2 text-sm text-neutral-400 max-md:flex max-md:gap-x-6 max-md:flex-wrap">
-            <li>
-              <a href="#" class="text-neutral-400 hover:text-neutral-100 block">
-                Request a Quote
-              </a>
-            </li>
-            <li>
-              <a href="#" class="text-neutral-400 hover:text-neutral-100 block">
-                Service Department
-              </a>
-            </li>
-            <li>
-              <a href="#" class="text-neutral-400 hover:text-neutral-100 block">
-                Find a Sales Rep
-              </a>
-            </li>
-            <li>
-              <a href="#" class="text-neutral-400 hover:text-neutral-100 block">
-                Federal Government Sales
-              </a>
-            </li>
-          </ul>
+        </div>
+
+        <!-- Links Navigation -->
+        <div class="grid grid-cols-2 sm:grid-cols-2 gap-12 lg:gap-24">
+          <div class="space-y-6">
+            <h4 class="font-bold text-white uppercase tracking-[0.2em] text-xs opacity-50">Quick Links</h4>
+            <ul class="space-y-4 text-base">
+              <li><NuxtLink to="/products" class="text-neutral-400 hover:text-white transition-colors duration-200">Products</NuxtLink></li>
+              <li><NuxtLink to="/about" class="text-neutral-400 hover:text-white transition-colors duration-200">About Us</NuxtLink></li>
+              <li><NuxtLink to="/contacts" class="text-neutral-400 hover:text-white transition-colors duration-200">Contacts</NuxtLink></li>
+            </ul>
+          </div>
+          <div class="space-y-6">
+            <h4 class="font-bold text-white uppercase tracking-[0.2em] text-xs opacity-50">Support</h4>
+            <ul class="space-y-4 text-base">
+              <li><a href="mailto:info@barnesfire.com" class="text-neutral-400 hover:text-white transition-colors duration-200">Support Email</a></li>
+              <li><a href="tel:+1234567890" class="text-neutral-400 hover:text-white transition-colors duration-200">Call Center</a></li>
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
-    <div
-        class="mt-10 flex flex-col md:flex-row items-center justify-between gap-4 border-t border-white/10 pt-6 text-xs text-neutral-500">
-      <p>Copyright © 2025 THE BARNES · All Rights Reserved</p>
-      <div class="flex items-center gap-4">
-        <span>Privacy</span>
-        <span>Terms</span>
-        <span>Cookies</span>
+
+      <!-- Bottom Bar -->
+      <div class="mt-20 flex flex-col md:flex-row items-center justify-center gap-8 border-t border-white/5 pt-10">
+        <p class="text-[11px] text-neutral-500 uppercase tracking-[0.2em] text-center">
+          Copyright © 2025 THE BARNES FIRE EQUIPMENT · All Rights Reserved
+        </p>
       </div>
-    </div>
     </div>
   </footer>
 </template>

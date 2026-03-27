@@ -17,25 +17,14 @@ interface ProductModel {
   images: string[]
 }
 
-interface MetaModel {
-  current_page: number
-  last_page: number
-  per_page: number
-  total: number
-  total_pages: number
-}
-
 const products = ref<ProductModel[]>([])
-const meta = ref<MetaModel | null>(null)
 const getProductsLoading = ref<boolean>(false)
 
 const getProducts = async () => {
   getProductsLoading.value = true
   try {
-    const response = await axiosInstance.get("/products/products", {params: {per_page: 10}})
+    const response = await axiosInstance.get("/products/products", {params: {per_page: 12}})
     products.value = response.data.data
-    meta.value = response.data.meta
-    window.scrollTo({top: 0, behavior: "smooth"});
   } catch (e) {
     console.log(e)
   } finally {
@@ -56,53 +45,74 @@ const prevSlide = () => swiperRef.value?.slidePrev()
 </script>
 
 <template>
-  <section class="py-20 bg-[#F2F2F4]">
-    <div class="max-w-[1200px] mx-auto px-4">
-      <!-- Header with Navigation Buttons -->
-      <div class="flex items-center justify-between mb-10">
-        <h2 class="text-3xl font-semibold max-sm:text-xl" v-scroll-reveal>Discover Products</h2>
-        <div class="flex gap-3">
+  <section class="py-16 sm:py-24 bg-neutral-50 overflow-hidden">
+    <div class="px-4 xs:px-6 lg:px-12 mb-10 sm:mb-14">
+      <div class="flex flex-col sm:flex-row items-end sm:items-center justify-between gap-6 max-w-[1400px] mx-auto">
+        <div class="space-y-2" v-scroll-reveal>
+          <h2 class="text-3xl sm:text-4xl font-bold text-neutral-900 tracking-tight">Our Collection</h2>
+          <p class="text-neutral-500 text-sm sm:text-base max-w-md">Discover our latest equipment and professional solutions.</p>
+        </div>
+        
+        <div class="flex gap-2">
           <button 
             @click="prevSlide" 
-            class="w-12 h-12 rounded-full border border-neutral-300 flex items-center justify-center hover:bg-white hover:border-primary hover:text-primary transition-all duration-300 active:scale-90"
+            class="w-12 h-12 rounded-full border border-neutral-200 flex items-center justify-center bg-white hover:bg-neutral-900 hover:text-white hover:border-neutral-900 transition-all duration-300 active:scale-95 shadow-sm"
             aria-label="Previous slide"
           >
-            <i class="pi pi-chevron-left"></i>
+            <i class="pi pi-arrow-left text-sm"></i>
           </button>
           <button 
             @click="nextSlide" 
-            class="w-12 h-12 rounded-full border border-neutral-300 flex items-center justify-center hover:bg-white hover:border-primary hover:text-primary transition-all duration-300 active:scale-90"
+            class="w-12 h-12 rounded-full border border-neutral-200 flex items-center justify-center bg-white hover:bg-neutral-900 hover:text-white hover:border-neutral-900 transition-all duration-300 active:scale-95 shadow-sm"
             aria-label="Next slide"
           >
-            <i class="pi pi-chevron-right"></i>
+            <i class="pi pi-arrow-right text-sm"></i>
           </button>
         </div>
       </div>
+    </div>
 
+    <div class="pl-4 xs:pl-6 lg:pl-12">
       <ClientOnly>
         <Swiper 
           :slidesPerView="'auto'"
-          :loop="true"
+          :loop="products?.length > 4"
           :modules="modules"
-          class="swiper-brands"
+          class="swiper-discover !overflow-visible"
           :autoplay="{
-            delay: 8000,
+            delay: 5000,
             disableOnInteraction: false,
           }"
-          :space-between="30"
+          :space-between="24"
           @swiper="onSwiper"
+          :breakpoints="{
+            '320': { slidesPerView: 'auto', spaceBetween: 12 },
+            '480': { slidesPerView: 'auto', spaceBetween: 16 },
+            '1024': { slidesPerView: 'auto', spaceBetween: 24 }
+          }"
         >
           <template v-if="products?.length && !getProductsLoading">
-            <SwiperSlide v-for="product in products" :key="product.id" class="h-full py-4 !w-[300px]">
-              <NuxtLink class="flex w-full h-full group" :to="`/products/${product.id}`">
-                <div
-                    class="bg-white rounded-2xl shadow-sm hover:shadow-2xl p-6 flex flex-col items-center text-center justify-between w-full min-h-[400px] transition-all duration-500 transform hover:-translate-y-2 border border-neutral-100">
-                  <div class="flex flex-col items-center w-full">
-                    <div class="overflow-hidden w-full mb-6 rounded-xl">
-                       <SetImage :image-url="product.images[0]" class="h-48 w-full object-contain transition-transform duration-700 group-hover:scale-110"/>
+            <SwiperSlide v-for="product in products" :key="product.id" class="!w-[240px] xs:!w-[280px] sm:!w-[340px]">
+              <NuxtLink class="flex w-full group" :to="`/products/${product.id}`">
+                <div class="flex flex-col w-full">
+                  <div class="relative overflow-hidden w-full aspect-[4/5] mb-5 flex items-center justify-center">
+                    <SetImage 
+                      :image-url="product.images[0]" 
+                      class="w-full h-full object-contain transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div class="absolute top-4 left-4">
+                       <span class="px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-[10px] font-bold uppercase tracking-widest text-neutral-800 shadow-sm border border-white/20">
+                         {{ product.category }}
+                       </span>
                     </div>
-                    <h3 class="font-bold text-neutral-800 text-lg mb-2 line-clamp-2 group-hover:text-primary transition-colors duration-300">{{ product.title }}</h3>
-                    <p class="text-neutral-500 text-sm mb-4 line-clamp-3">{{ product.category }}</p>
+                  </div>
+                  <div class="space-y-1 px-1">
+                    <h3 class="font-bold text-neutral-900 text-lg group-hover:text-primary transition-colors duration-300 line-clamp-1">
+                      {{ product.title }}
+                    </h3>
+                    <p class="text-neutral-500 text-sm line-clamp-2 leading-relaxed">
+                      {{ product.description }}
+                    </p>
                   </div>
                 </div>
               </NuxtLink>
@@ -110,8 +120,17 @@ const prevSlide = () => swiperRef.value?.slidePrev()
           </template>
           
           <template v-if="getProductsLoading">
-             <SwiperSlide v-for="n in 5" :key="n" class="!w-[300px]">
-               <Skeleton height="400px" width="100%" borderRadius="1rem" />
+             <SwiperSlide v-for="n in 5" :key="n" class="!w-[280px] sm:!w-[340px]">
+               <div class="flex flex-col w-full space-y-5">
+                 <Skeleton width="100%" class="aspect-[4/5]" borderRadius="1.5rem" />
+                 <div class="space-y-3 px-1">
+                   <Skeleton width="70%" height="1.75rem" borderRadius="0.5rem" />
+                   <div class="space-y-2">
+                     <Skeleton width="100%" height="1rem" />
+                     <Skeleton width="85%" height="1rem" />
+                   </div>
+                 </div>
+               </div>
              </SwiperSlide>
           </template>
         </Swiper>
@@ -121,7 +140,7 @@ const prevSlide = () => swiperRef.value?.slidePrev()
 </template>
 
 <style lang="css">
-.swiper-brands .swiper-wrapper {
-  padding-bottom: 20px;
+.swiper-discover .swiper-wrapper {
+  padding-bottom: 40px;
 }
 </style>

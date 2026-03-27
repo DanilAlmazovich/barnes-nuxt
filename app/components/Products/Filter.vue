@@ -27,10 +27,8 @@ const selectedCategories = ref<number[]>([])
 
 onMounted(() => {
   getCategories()
-  if (route.query.category_id) {
-    const ids = Array.isArray(route.query.category_id) 
-      ? route.query.category_id.map(Number) 
-      : [Number(route.query.category_id)]
+  if (route.query.category_ids) {
+    const ids = String(route.query.category_ids).split(',').map(Number).filter(id => !isNaN(id))
     selectedCategories.value = ids
   }
 })
@@ -38,20 +36,22 @@ onMounted(() => {
 watch(selectedCategories, (newVal) => {
   const query = { ...route.query }
   if (newVal.length > 0) {
-    query.category_id = newVal.map(String)
+    query.category_ids = newVal.join(',')
   } else {
-    delete query.category_id
+    delete query.category_ids
   }
+  // Сбрасываем страницу на первую при изменении фильтров
+  delete query.page
   router.push({ name: 'products', query })
 })
 
 // Sync with route changes (e.g. from outside the component)
-watch(() => route.query.category_id, (newVal) => {
+watch(() => route.query.category_ids, (newVal) => {
   if (!newVal) {
     selectedCategories.value = []
     return
   }
-  const ids = Array.isArray(newVal) ? newVal.map(Number) : [Number(newVal)]
+  const ids = String(newVal).split(',').map(Number).filter(id => !isNaN(id))
   if (JSON.stringify(ids.sort()) !== JSON.stringify([...selectedCategories.value].sort())) {
     selectedCategories.value = ids
   }
@@ -63,8 +63,8 @@ watch(() => route.query.category_id, (newVal) => {
     <div class="flex items-center justify-between mb-6">
       <h3 class="font-bold text-xl text-neutral-900">Filters</h3>
       <button 
-        v-if="selectedCategories.length > 0"
-        @click="selectedCategories = []"
+        v-if="selectedCategories.length > 0 || route.query.search"
+        @click="router.push({ name: 'products' })"
         class="text-sm text-primary hover:underline font-medium"
       >
         Reset
