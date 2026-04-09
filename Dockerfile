@@ -5,6 +5,8 @@ WORKDIR /usr/app
 
 COPY ./ ./
 
+COPY .env.production .env
+
 RUN npm install --no-progress
 RUN npm run build-only
 
